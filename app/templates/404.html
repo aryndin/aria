@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}
+	404...
+{% endblock title %}
+{% block page_header %}
+	<h1> 404</h1>
+	<h2> Кажется... страница, которую вы запросили, не существует...</h2>
+{% endblock page_header %}
+{% block page_body %}
+	<img src="{{ url_for('static', filename='404.jpg') }}" alt="ничего не поделать...">
+{% endblock page_body %}

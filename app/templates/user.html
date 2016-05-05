@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block page_header %}
+	<div class="profile-header">
+		<h1>
+			User: {{ user.nickname }}
+		</h1>
+		{% if current_user==user %}
+			{% if current_user.is_allowed(Permission.ADMINISTRATING) %}
+            <a class="btn btn-default" href="{{ url_for('.edit_profile_admin', nickname=user.nickname) }}">Edit Profile</a>
+			{% else %}
+			<a class="btn btn-default" href="{{ url_for('.edit_profile') }}">Edit Profile</a>
+			{% endif %}
+		{% elif current_user.is_allowed(Permission.ADMINISTRATING) %}
+            <a class="btn btn-danger"
+                    href="{{ url_for('.edit_profile_admin', nickname=user.nickname) }}">
+	            Edit Profile [Admin]
+            </a>
+		{% endif %}
+	</div>
+{% endblock page_header %}
+{% block page_body %}
+	{% if tasks %}
+		<h2> You have the following tasks:</h2>
+		{% for task in tasks %}
+			<div><p>{% if task.state==1 %} uncompleted
+					{% else %}             complited
+					{% endif %}
+			task from {{ task.author.nickname }}: <b>{{ task.body }}</b></p></div>
+		{% endfor %}
+	{% endif %}
+{% endblock page_body %}

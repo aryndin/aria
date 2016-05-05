@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}
+	403 Доступ запрещён
+{% endblock title %}
+{% block page_header %}
+	<h1> 403 Доступ запрещён</h1>
+	<h2> Ваш аккаунт не имеет достуточных прав для доступа к странице или модулю.</h2>
+{% endblock page_header %}
+{% block page_body %}
+	<img src="{{ url_for('static', filename='403.png') }}" alt="Бабайка", width="500">
+{% endblock page_body %}
