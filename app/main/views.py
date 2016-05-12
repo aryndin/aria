@@ -1,32 +1,25 @@
-from flask import render_template, flash, redirect, abort, session, url_for, request, g
+from flask import render_template, flash, redirect, abort, session, url_for, request, g, current_app
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from .. import db, lm
-from ..models import User, Permission, Group
+from ..models import User, Permission, Group, Task, Thing
 from . import main
 from ..decorators import permission_required
-from .forms import EditProfileForm, EditProfileAdminForm
+from .forms import EditProfileForm, EditProfileAdminForm, TaskForm, ThingsForm
 
 
 @main.route('/')
 @main.route('/index')
 def index():
-	user = g.user
-	tasks = [  # fake array of posts
-		{
-			'state': 1,
-			'author': {'nickname': 'John'},
-			'body': 'Beautiful day in Portland!'
-		},
-		{
-			'state': 0,
-			'author': {'nickname': 'Susan'},
-			'body': 'The Avengers movie was so cool!'
-		}
-	]
-	return render_template("index.html",
-						   title='Home',
-						   user=user,
-						   tasks=tasks)
+	if current_user.is_authenticated:
+		num_of_tasks = current_user.tasks_to_do.filter_by(state=0).count()
+		return render_template("index.html",
+							   title='Home',
+							   user=current_user,
+							   num_of_tasks=num_of_tasks)
+	else:
+		return render_template("index.html",
+								title='Home',
+								user=current_user)
 
 
 
@@ -39,13 +32,16 @@ def user(nickname):
 		flash('User {} not found.'.format(nickname))
 		abort(404)
 		return redirect(url_for('.index'))
-	tasks = [
-		{'author': user, 'body': 'Test post #1'},
-		{'author': user, 'body': 'Test post #2'}
-	]
+	page = request.args.get('page', 1, type=int)
+	pagination = user.tasks_to_do.order_by(Task.timelimit.desc()).paginate(
+		page, per_page=current_app.config['FLASKY_ELEMENTS_PER_PAGE'] or None,
+		error_out=False
+	)
+	tasks = pagination.items
 	return render_template('user.html',
 						   user=user,
-						   tasks=tasks)
+						   tasks=tasks,
+						   pagination=pagination)
 
 
 
@@ -70,15 +66,133 @@ def edit_profile_admin(nickname):
 	if form.validate_on_submit():
 		user.nickname = form.nickname.data
 		user.fullname = form.fullname.data
+		user.email = form.email.data
 		user.group = Group.query.get(form.group.data)
 		db.session.add(user)
 		db.session.commit()
 		flash('The profile had been updated successfully.', category='success')
-		return redirect(url_for('.user', username=user.nickname))
-	form.nickname.data = user.nickname
-	form.fullname.data = user.fullname
-	form.group.data = user.group_id
+		return redirect(url_for('.user', nickname=user.nickname))
+	form.nickname.data = form.nickname.data or user.nickname
+	form.fullname.data = form.fullname.data or user.fullname
+	form.email.data = form.email.data or user.email
+	form.group.data = form.group.data or user.group_id
 	return render_template('edit_profile.html', form=form, user=user)
+
+
+@main.route('/new-task', methods=['GET', 'POST'])
+@login_required
+@permission_required(Permission.USER_M)
+def add_new_task():
+	form = TaskForm()
+	if current_user.is_allowed(Permission.USER_M) and \
+			form.validate_on_submit():
+		task = Task(title=form.title.data,
+					description=form.description.data,
+					assigned_to=form.worker.data,
+					manager=current_user._get_current_object(),
+					timelimit=form.timelimit.data,
+					price=form.price.data)
+		db.session.add(task)
+		worker_nickname = task.worker.nickname
+		db.session.commit()
+		flash('The task has been added', category='success')
+		return redirect(url_for('.user', nickname=worker_nickname))
+	return render_template('new_task.html', form=form)
+
+
+@main.route('/edit-task/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_task(id):
+	task = Task.query.get_or_404(id)
+	if current_user != task.manager and \
+			not current_user.is_allowed(Permission.ADMINISTRATING):
+		abort(403)
+	current_worker = task.worker
+	form = TaskForm()
+	if form.validate_on_submit():
+		task.title = form.title.data
+		task.description = form.description.data
+		task.assigned_to = form.worker.data
+		task.timelimit = form.timelimit.data
+		task.price = form.price.data
+		db.session.add(task)
+		db.session.commit()
+		flash('The task has been updated', category='success')
+		return redirect(url_for('.user', nickname=current_worker.nickname))
+	form.title.data = task.title
+	form.description.data = task.description
+	form.worker.data = task.assigned_to
+	form.timelimit.data = task.timelimit
+	form.price.data = task.price
+	return render_template('edit_task.html', form=form)
+
+
+
+@main.route('/task/<int:id>')
+@login_required
+def task(id):
+	task = Task.query.get_or_404(id)
+	return render_template('task.html', task=task)
+
+
+@main.route('/delete-task/<int:id>')
+@login_required
+def delete_task(id):
+	task = Task.query.get_or_404(id)
+	worker_nickname = task.worker.nickname
+	if current_user != task.manager and \
+			not current_user.is_allowed(Permission.ADMINISTRATING):
+		abort(403)
+	task.delete()
+	db.session.commit()
+	flash('The task has deleted', category='success')
+	return redirect(url_for('.user', nickname=worker_nickname))
+
+
+@main.route('/depot')
+@login_required
+@permission_required(Permission.DEPOT_M)
+def depot():
+	page = request.args.get('page', 1, type=int)
+	pagination = Thing.query.order_by(Thing.name).paginate(
+		page, per_page=current_app.config['FLASKY_ELEMENTS_PER_PAGE'] or None,
+		error_out=False
+	)
+	things = pagination.items
+	return render_template('depot.html',
+						   things=things,
+						   pagination=pagination)
+
+
+@main.route('/depot/new-item', methods=['GET', 'POST'])
+@login_required
+@permission_required(Permission.DEPOT_M)
+def new_thing():
+	if request.method == 'POST':
+		if 'add_entry' in request.form:
+			form = ThingsForm()
+			form.data = request.form
+			form.append_entry()
+			return render_template('new_thing.html', form=form)
+	else:
+		form = ThingsForm()
+		return render_template('new_thing.html', form=form)
+	return render_template('index.html')
+
+	# if form.validate_on_submit():
+	# 	task = Task(title=form.title.data,
+	# 				description=form.description.data,
+	# 				assigned_to=form.worker.data,
+	# 				manager=current_user._get_current_object(),
+	# 				timelimit=form.timelimit.data,
+	# 				price=form.price.data)
+	# 	db.session.add(task)
+	# 	worker_nickname = task.worker.nickname
+	# 	db.session.commit()
+	# 	flash('The task has been added', category='success')
+	# 	return redirect(url_for('.user', nickname=worker_nickname))
+
+
 
 
 

@@ -1,12 +1,20 @@
+{% import "helpers/_macros.html" as macros %}
+
+
 {% extends "base.html" %}
 {% block page_header %}
+	<img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=40) }}">
 	<div class="profile-header">
 		<h1>
 			User: {{ user.nickname }}
 		</h1>
+
 		{% if current_user==user %}
 			{% if current_user.is_allowed(Permission.ADMINISTRATING) %}
-            <a class="btn btn-default" href="{{ url_for('.edit_profile_admin', nickname=user.nickname) }}">Edit Profile</a>
+            <a class="btn btn-default"
+               href="{{ url_for('.edit_profile_admin', nickname=user.nickname) }}">
+	            Edit Profile
+            </a>
 			{% else %}
 			<a class="btn btn-default" href="{{ url_for('.edit_profile') }}">Edit Profile</a>
 			{% endif %}
@@ -16,16 +24,29 @@
 	            Edit Profile [Admin]
             </a>
 		{% endif %}
+		{% if user==current_user and current_user.is_allowed(Permission.USER_M) %}
+			<a class="btn btn-default"
+               href="{{ url_for('.add_new_task') }}">
+	            New task
+            </a>
+		{% endif %}
+		{% if user==current_user and current_user.is_allowed(Permission.DEPOT_M) %}
+			<a class="btn btn-default"
+               href="{{ url_for('.depot') }}">
+	            Depot
+            </a>
+		{% endif %}
+
 	</div>
 {% endblock page_header %}
 {% block page_body %}
 	{% if tasks %}
 		<h2> You have the following tasks:</h2>
-		{% for task in tasks %}
-			<div><p>{% if task.state==1 %} uncompleted
-					{% else %}             complited
-					{% endif %}
-			task from {{ task.author.nickname }}: <b>{{ task.body }}</b></p></div>
-		{% endfor %}
+		{% include 'helpers/_tasks.html' %}
+		{% if pagination %}
+			<div class="pagination">
+				{{ macros.pagination_widget(pagination, '.user', nickname=user.nickname) }}
+			</div>
+		{% endif %}
 	{% endif %}
 {% endblock page_body %}

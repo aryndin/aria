@@ -1,0 +1,46 @@
+<ul class="tasks">
+	{% for task in tasks %}
+		<li class="task">
+			<div class="task-thumbnail">
+				<a href="{{ url_for('.user', nickname=task.manager.nickname) }}">
+					<img class="img-rounded profile-thumbnail"
+					     src="{{ task.manager.gravatar(size=40) }}">
+				</a>
+			</div>
+			<div class="task-content">
+				<div class="task-date"> {{ task.timestamp }} </div>
+				<div class="task-manager">
+					<a href="{{ url_for('.user', nickname=task.manager.nickname) }}">
+						{{ task.manager.nickname }}
+					</a>
+				</div>
+				<div class="task-title {% if task.state %} task-complited
+										{% else %} task-inprogress
+										{% endif %}">
+					{{ task.title }}
+				</div>
+				<div class="task-description">
+					{% if task.description_html %}
+						{{ task.description_html | safe }}
+					{% else %}
+						{{ task.description }}
+					{% endif %}
+				</div>
+				<div class="task-footer">
+					<a href="{{ url_for('.task', id=task.id) }}">
+						<span class="label label-default">#</span>
+					</a>
+					{% if current_user == task.manager %}
+						<a href="{{ url_for('.edit_task', id=task.id) }}">
+							<span class="label label-primary">Edit</span>
+						</a>
+					{% elif current_user.is_allowed(Permission.ADMINISTRATING) %}
+						<a href="{{ url_for('.edit_task', id=task.id) }}">
+							<span class="label label-danger">Edit [Admin]</span>
+						</a>
+					{% endif %}
+				</div>
+			</div>
+		</li>
+	{% endfor %}
+</ul>

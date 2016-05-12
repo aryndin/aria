@@ -20,6 +20,8 @@ class Config:
 
 	BOOTSTRAP_SERVE_LOCAL = True
 
+	FLASKY_ELEMENTS_PER_PAGE = 20
+
 	@staticmethod
 	def init_app(app):
 		pass

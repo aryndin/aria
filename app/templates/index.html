@@ -8,6 +8,11 @@
 				Stranger
 		{% endif %}
 	</h1>
+	<h2>
+		{% if num_of_tasks %}
+			You've got {{ num_of_tasks }} tasks, go to your page to read them.
+		{% endif %}
+	</h2>
 {% endblock page_header %}
 {% block page_body %}
 	{% if tasks %}

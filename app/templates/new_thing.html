@@ -1,0 +1,24 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
+
+{% block page_header %}
+	<h1>Add new item {% if user and user!=current_user and current_user.is_allowed(Permission.ADMINISTRATING) %}
+		<!-- TODO look for a better way to check if user is admin and changing another's profile -->
+		[Admin]
+		{% endif %}
+	</h1>
+{% endblock page_header %}
+
+{% block page_body %}
+	<form action="" method="post" name="login">
+		{{ form.hidden_tag() }}
+		<p>
+			Please enter your OpenID:<br>
+			{{ form.things }}<br>
+		</p>
+		<p><input type="submit" value="Add"></p>
+    </form>
+	<form action="" method="post" name="add_entry">
+		<p><input type="submit" name="add_entry" value="Add entry"></p>
+	</form>
+{% endblock page_body %}

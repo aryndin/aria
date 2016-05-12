@@ -2,11 +2,12 @@ from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 from app import create_app, db
 
+
 app = create_app('default')
 manager = Manager(app)
-migrate = Migrate(app, db)
+migrate = Migrate(app, db) #compare_type=True
 manager.add_command('db', MigrateCommand)
-db.Model()
+
 
 @manager.command
 def test():
