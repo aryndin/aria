@@ -1,0 +1,32 @@
+{% extends 'admin/master.html' %}
+
+{% block tail_js %}
+{{ super() }}
+	<script type="text/javascript" src="{{ url_for('static', filename='Chart.min.js') }}"></script>
+	<script>
+		var ctx = document.getElementById("myChart");
+		ctx.canvas.width = 300;
+		ctx.canvas.height = 300;
+	</script>
+	<script>
+		var data = JSON.parse('{{ data|safe }}');
+	</script>
+	<script type="text/javascript">
+		var myBarChart = new Chart(ctx, {
+    type: 'bar',
+    data: data,
+			options: {
+				responsive: false
+			}
+});
+	</script>
+
+{% endblock tail_js %}
+{% block body %}
+	<p>Hi</p>
+		<canvas style="width: 500px; height: 500px;" id="myChart" width="500" height="500"></canvas>
+<script>
+		console.log(JSON.parse('{{ data }})')
+	</script>
+
+{% endblock %}

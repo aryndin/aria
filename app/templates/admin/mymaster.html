@@ -1,0 +1,28 @@
+{% extends 'admin/base.html' %}
+
+
+{% block head_css %}
+	{{ super() }}
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
+	<link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock head_css %}
+
+{% block access_control %}
+	{{ super() }}
+		<ul class="nav navbar-nav navbar-right">
+			{% if current_user.is_authenticated %}
+			    <li class="dropdown">
+			        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+			            <img src="{{ current_user.gravatar(size=20) }}">
+			            Account <b class="caret"></b>
+			        </a>
+			        <ul class="dropdown-menu">
+			            <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+			        </ul>
+			    </li>
+			{% else %}
+			    <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+			{% endif %}
+		</ul>
+{% endblock %}
