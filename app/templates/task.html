@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block page_header %}
 		<h1>
-			Task # {{ task.id }}
+			{{_('Task')}} # {{ task.id }}
 		</h1>
 {% endblock page_header %}
 {% block page_body %}
@@ -10,13 +10,13 @@
 		<div class="task-date"> Assigned: {{ task.timestamp }} </div>
 		<div class="task-date"> Timelimit: {{ task.timestamp }} </div>
 		<div class="task-manager">
-			manager:
+			{{_('manager')}}:
 			<a href="{{ url_for('.user', nickname=task.manager.nickname) }}">
 				{{ task.manager.nickname }}
 			</a>
 		</div>
 		<div class="task-worker">
-			worker:
+			{{_('worker')}}:
 			<a href="{{ url_for('.user', nickname=task.manager.nickname) }}">
 				{{ task.worker.nickname }}
 			</a>
@@ -36,14 +36,14 @@
 		<div class="task-footer">
 		{% if task.manager == current_user %}
 			<a href="{{ url_for('.edit_task', id=task.id) }}"
-				class="btn btn-default">Edit</a>
+				class="btn btn-default">{{_('Edit')}}</a>
 			<a href="{{ url_for('.delete_task', id=task.id) }}"
-		       class="btn btn-warning">Delete</a>
+		       class="btn btn-warning">{{_('Delete')}}</a>
 		{% elif current_user.is_allowed(Permission.ADMINISTRATING) %}
 			<a href="{{ url_for('.edit_task', id=task.id) }}"
-				class="btn btn-warning">Edit [Admin]</a>
+				class="btn btn-warning">{{_('Edit')}} [Admin]</a>
 			<a href="{{ url_for('.delete_task', id=task.id) }}"
-		        class="btn btn-danger">Delete [Admin]</a>
+		        class="btn btn-danger">{{_('Delete')}} [Admin]</a>
 		{% endif %}
 		</div>
 

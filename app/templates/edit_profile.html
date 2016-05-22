@@ -2,7 +2,8 @@
 {% extends "base.html" %}
 
 {% block page_header %}
-	<h1>Edit your profile {% if user and user!=current_user and current_user.is_allowed(Permission.ADMINISTRATING) %}
+	<h1>{{_('Edit your profile')}}
+		{% if user and user!=current_user and current_user.is_allowed(Permission.ADMINISTRATING) %}
 		<!-- TODO look for a better way to check if user is admin and changing another's profile -->
 		[Admin]
 		{% endif %}

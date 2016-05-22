@@ -7,6 +7,11 @@ class Config:
 	WTF_CSRF_ENABLED = True
 	SECRET_KEY = 'qwerty'
 
+	LANGUAGES = {
+		'en': 'English',
+		'ru': 'Русский'
+	}
+
 	SQLALCHEMY_DATABASE_URI = 'mysql://root:951793@localhost/mainflask'
 	SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 	SQLALCHEMY_TRACK_MODIFICATIONS = True

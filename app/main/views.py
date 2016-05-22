@@ -5,6 +5,8 @@ from ..models import User, Permission, Group, Task, Thing
 from . import main
 from ..decorators import permission_required
 from .forms import EditProfileForm, EditProfileAdminForm, TaskForm, ThingsForm
+from app import babel
+from flask.ext.babelex import gettext, lazy_gettext
 
 
 @main.route('/')
@@ -193,6 +195,10 @@ def new_thing():
 	# 	return redirect(url_for('.user', nickname=worker_nickname))
 
 
+@babel.localeselector
+def get_locale():
+	print(request.accept_languages.best_match(current_app.config.get('LANGUAGES').keys()))
+	return request.accept_languages.best_match(current_app.config.get('LANGUAGES').keys())
 
 
 
@@ -204,3 +210,4 @@ def before_request():
 @lm.user_loader
 def load_user(id):
 	return User.query.get(int(id))
+

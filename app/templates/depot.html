@@ -3,11 +3,11 @@
 
 {% extends "base.html" %}
 {% block page_header %}
-	<h1>Depot</h1>
+	<h1>{{_('Depot')}}</h1>
 	{% if current_user.is_allowed(Permission.DEPOT_M) %}
 		<a class="btn btn-default"
            href="{{ url_for('.new_thing') }}">
-            Add items
+            {{_('Add items')}}
         </a>
 	{% endif %}
 {% endblock page_header %}

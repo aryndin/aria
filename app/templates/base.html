@@ -10,7 +10,7 @@
 	{% if title %}
 		{{ title }}
 	{% else %}
-		Welcome to flask-app
+		{{_('Welcome to flask-app')}}
 	{% endif %}
 {% endblock title %}
 
@@ -28,9 +28,9 @@
 		</div>
 		<div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
-				<li><a href="{{ url_for('main.index') }}">Home</a></li>
+				<li><a href="{{ url_for('main.index') }}">{{_('Home')}}</a></li>
 				{% if current_user.is_authenticated %}
-					<li><a href="{{ url_for('main.user', nickname=current_user.nickname) }}">Personal page</a></li>
+					<li><a href="{{ url_for('main.user', nickname=current_user.nickname) }}">{{_('Personal page')}}</a></li>
 				{% endif %}
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
@@ -38,14 +38,14 @@
 	                <li class="dropdown">
 	                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 		                    <img src="{{ current_user.gravatar(size=20) }}">
-	                        Account <b class="caret"></b>
+	                        {{_('Account')}} <b class="caret"></b>
 	                    </a>
 	                    <ul class="dropdown-menu">
-	                        <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+	                        <li><a href="{{ url_for('auth.logout') }}">{{_('Log Out')}}</a></li>
 	                    </ul>
 	                </li>
                 {% else %}
-	                <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+	                <li><a href="{{ url_for('auth.login') }}">{{_('Log In')}}</a></li>
                 {% endif %}
             </ul>
 		</div>

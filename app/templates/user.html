@@ -6,34 +6,34 @@
 	<img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=40) }}">
 	<div class="profile-header">
 		<h1>
-			User: {{ user.nickname }}
+			{{_('User')}}: {{ user.nickname }}
 		</h1>
 
 		{% if current_user==user %}
 			{% if current_user.is_allowed(Permission.ADMINISTRATING) %}
             <a class="btn btn-default"
                href="{{ url_for('.edit_profile_admin', nickname=user.nickname) }}">
-	            Edit Profile
+	            {{_('Edit Profile')}}
             </a>
 			{% else %}
-			<a class="btn btn-default" href="{{ url_for('.edit_profile') }}">Edit Profile</a>
+			<a class="btn btn-default" href="{{ url_for('.edit_profile') }}">{{_('Edit Profile')}}</a>
 			{% endif %}
 		{% elif current_user.is_allowed(Permission.ADMINISTRATING) %}
             <a class="btn btn-danger"
                     href="{{ url_for('.edit_profile_admin', nickname=user.nickname) }}">
-	            Edit Profile [Admin]
+	            {{_('Edit Profile')}} [Admin]
             </a>
 		{% endif %}
 		{% if user==current_user and current_user.is_allowed(Permission.USER_M) %}
 			<a class="btn btn-default"
                href="{{ url_for('.add_new_task') }}">
-	            New task
+	             {{_('New task')}}
             </a>
 		{% endif %}
 		{% if user==current_user and current_user.is_allowed(Permission.DEPOT_M) %}
 			<a class="btn btn-default"
                href="{{ url_for('.depot') }}">
-	            Depot
+	             {{_('Depot')}}
             </a>
 		{% endif %}
 
@@ -41,7 +41,7 @@
 {% endblock page_header %}
 {% block page_body %}
 	{% if tasks %}
-		<h2> You have the following tasks:</h2>
+		<h2> {{_('You have the following tasks')}}:</h2>
 		{% include 'helpers/_tasks.html' %}
 		{% if pagination %}
 			<div class="pagination">

@@ -1,0 +1,178 @@
+# Russian translations for PROJECT.
+# Copyright (C) 2016 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2016-05-23 00:37+0300\n"
+"PO-Revision-Date: 2016-05-23 00:14+0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ru\n"
+"Language-Team: ru <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.2.0\n"
+
+#: app/admin/__init__.py:10 app/admin/__init__.py:11 app/admin/__init__.py:12
+#: app/admin/__init__.py:13 app/admin/__init__.py:14 app/admin/__init__.py:15
+#: app/admin/__init__.py:16
+msgid "Database"
+msgstr "База данных"
+
+#: app/admin/__init__.py:18
+msgid "Analytics"
+msgstr "Аналитика"
+
+#: app/main/forms.py:17
+msgid "Nickname (login)"
+msgstr "Логин"
+
+#: app/main/forms.py:22
+msgid "Email"
+msgstr "Email"
+
+#: app/main/forms.py:24
+msgid "Fullname"
+msgstr "ФИО"
+
+#: app/main/forms.py:25
+msgid "Group"
+msgstr "Группа"
+
+#: app/main/forms.py:26 app/main/forms.py:51
+msgid "Submit"
+msgstr "ОК"
+
+#: app/main/forms.py:37
+msgid "Email is already registered."
+msgstr "Email уже используется"
+
+#: app/main/forms.py:42
+msgid "Nickname is already registered."
+msgstr "Логин уже используется"
+
+#: app/main/forms.py:46 app/main/forms.py:60
+msgid "Title"
+msgstr "Заголовок"
+
+#: app/main/forms.py:47
+msgid "Description"
+msgstr "Описание"
+
+#: app/main/forms.py:48
+msgid "Worker"
+msgstr "Исполнитель"
+
+#: app/main/forms.py:49
+msgid "Price"
+msgstr "Цена"
+
+#: app/main/forms.py:50
+msgid "Timelimit"
+msgstr "Срок выполнения"
+
+#: app/templates/base.html:13
+msgid "Welcome to flask-app"
+msgstr "Добро пожаловать"
+
+#: app/templates/base.html:31
+msgid "Home"
+msgstr "Главная"
+
+#: app/templates/base.html:33
+msgid "Personal page"
+msgstr "Профиль"
+
+#: app/templates/base.html:41
+msgid "Account"
+msgstr "Аккаунт"
+
+#: app/templates/base.html:44
+msgid "Log Out"
+msgstr "Выйти"
+
+#: app/templates/base.html:48
+msgid "Log In"
+msgstr "Войти"
+
+#: app/templates/depot.html:6 app/templates/user.html:36
+msgid "Depot"
+msgstr "Склад"
+
+#: app/templates/depot.html:10
+msgid "Add items"
+msgstr "Добавить"
+
+#: app/templates/edit_profile.html:5
+msgid "Edit your profile"
+msgstr "Редактировать профиль"
+
+#: app/templates/edit_task.html:11
+msgid "Edit task"
+msgstr "Редактировать задачу"
+
+#: app/templates/index.html:7
+msgid "Log in please"
+msgstr "Авторизуйтесь, пожалуйста"
+
+#: app/templates/index.html:12
+#, python-format
+msgid "You've got %(num)s tasks. Go to the profile to read them."
+msgstr "Нам назначена %(num)s задача. Перейдите в профиль для просмотра"
+
+#: app/templates/new_task.html:11
+msgid "Add new task"
+msgstr "Создать задачу"
+
+#: app/templates/new_thing.html:5
+msgid "Add new item"
+msgstr "Новый артикул"
+
+#: app/templates/task.html:4
+msgid "Task"
+msgstr "Задача"
+
+#: app/templates/task.html:13
+msgid "manager"
+msgstr "Назначил"
+
+#: app/templates/task.html:19
+msgid "worker"
+msgstr "Исполнитель"
+
+#: app/templates/task.html:39 app/templates/task.html:44
+#: app/templates/helpers/_tasks.html:35 app/templates/helpers/_tasks.html:39
+msgid "Edit"
+msgstr "Редактирвать"
+
+#: app/templates/task.html:41 app/templates/task.html:46
+msgid "Delete"
+msgstr "Удалить"
+
+#: app/templates/user.html:9
+msgid "User"
+msgstr "Пользователь"
+
+#: app/templates/user.html:16 app/templates/user.html:19
+#: app/templates/user.html:24
+msgid "Edit Profile"
+msgstr "Редактировать профиль"
+
+#: app/templates/user.html:30
+msgid "New task"
+msgstr "Новое задание"
+
+#: app/templates/user.html:44
+msgid "You have the following tasks"
+msgstr "Вам назначены следующие задачи"
+
+#: app/templates/auth/login.html:21
+msgid "Sign In"
+msgstr "Авторизация"
+

@@ -222,7 +222,10 @@ class Supplier(db.Model):
 	__tablename__ = 'suppliers'
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(128))
-	shipment = db.relationship('Shipment', backref='supplier', lazy='dynamic')
+	shipments = db.relationship('Shipment', backref='supplier', lazy='dynamic')
+
+	def __repr__(self):
+		return '<Supplier {}>'.format(self.name)
 
 
 class Shipment(db.Model):
@@ -261,12 +264,31 @@ class Invoice(db.Model):
 	shipment = db.relationship('Shipment', back_populates='things', lazy='joined')
 	thing = db.relationship('Thing', back_populates='shipments', lazy='joined')
 
+	def __repr__(self):
+		#attrs = db.class_mapper(self.__class__).column_attrs
+		attrs = db.class_mapper(self.__class__).attrs  # show also relationships
+		if 'name' in attrs:
+			return self.name
+		elif 'code' in attrs:
+			return self.code
+		else:
+			print(attrs)
+			type(attrs)
+			return "<%s(%s)>" % (self.__class__.__name__,
+								 ', '.join('%s=%r' % (k.key, getattr(self, k.key))
+										   for k in attrs
+										   )
+								 )
+
+
 
 class Thing(db.Model):
 	__tablename__ = 'things'
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(128))
 	shipments = db.relationship('Invoice', back_populates='thing', lazy='dynamic',
+								cascade="save-update, merge, delete, delete-orphan")
+	orders = db.relationship('OrderList', back_populates='thing', lazy='dynamic',
 								cascade="save-update, merge, delete, delete-orphan")
 	measure_id = db.Column(db.Integer, db.ForeignKey('measures.id'))
 	stock = db.Column(db.Numeric(precision=10, scale=3))
@@ -282,6 +304,9 @@ class Thing(db.Model):
 								 lazy='dynamic',
 								 cascade='all, delete-orphan')
 	products = db.relationship('Product', backref='product')
+
+	def __repr__(self):
+		return '<{}>'.format(self.name)
 
 
 class TypeOfThing(db.Model):
@@ -316,6 +341,39 @@ class Product(db.Model):
 								secondary='product_assembler',
 								backref=db.backref('products', lazy='dynamic'),
 								lazy='dynamic')
+
+	def __repr__(self):
+		return '<{}>'.format(self.product.name)
+
+
+class Buyer(db.Model):
+	__tablename__ = 'buyer'
+	id = db.Column(db.Integer, primary_key=True)
+	fullname = db.Column(db.String(128))
+	phone_number = db.Column(db.String(30))
+	orders = db.relationship('Order', backref='buyer', lazy='dynamic')
+
+
+class Order(db.Model):
+	__tablename__ = 'order'
+	id = db.Column(db.Integer, primary_key=True)
+	id_buyer = db.Column(db.Integer, db.ForeignKey(Buyer.id))
+	state = db.Column(db.Boolean)
+	things = db.relationship('OrderList', back_populates='order', lazy='dynamic',
+							 cascade="save-update, merge, delete, delete-orphan")
+
+
+class OrderList(db.Model):
+	__tablename__ = 'order_list'
+	buyer_id = db.Column(db.Integer, db.ForeignKey('order.id'), primary_key=True)
+	thing_id = db.Column(db.Integer, db.ForeignKey('things.id'), primary_key=True)
+	amount = db.Column(db.Numeric(precision=10, scale=3))
+	price = db.Column(db.Numeric(precision=10, scale=3))
+	order = db.relationship('Order', back_populates='things', lazy='joined')
+	thing = db.relationship('Thing', back_populates='orders', lazy='joined')
+
+
+
 
 
 product_assembler = db.Table('product_assembler',

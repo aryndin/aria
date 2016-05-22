@@ -1,16 +1,15 @@
 {% extends "base.html" %}
 {% block page_header %}
 	<h1>
-		Hi,
 			{% if user.is_authenticated %}
 				{{ user.nickname }}
 			{% else %}
-				Stranger
+				{{_('Log in please')}}
 		{% endif %}
 	</h1>
 	<h2>
 		{% if num_of_tasks %}
-			You've got {{ num_of_tasks }} tasks, go to your page to read them.
+			{{_('You\'ve got %(num)s tasks. Go to the profile to read them.', num=num_of_tasks)}}
 		{% endif %}
 	</h2>
 {% endblock page_header %}
