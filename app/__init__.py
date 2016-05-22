@@ -3,6 +3,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.login import LoginManager
 from flask.ext.pagedown import PageDown
+from flask.ext.babel import Babel
 from config import config
 
 
@@ -12,6 +13,7 @@ lm = LoginManager()
 lm.session_protection = 'strong'
 lm.login_view = 'auth.login'
 pagedown = PageDown()
+babel = Babel()
 
 
 def create_app(config_name):
@@ -20,9 +22,13 @@ def create_app(config_name):
 	config[config_name].init_app(app)
 
 	bootstrap.init_app(app)
+	babel.init_app(app)
 	db.init_app(app)
 	lm.init_app(app)
 	pagedown.init_app(app)
+
+	from app.admin import flaskadmin
+	flaskadmin.init_app(app)
 
 	from .main import main as main_blueprint
 	app.register_blueprint(main_blueprint)

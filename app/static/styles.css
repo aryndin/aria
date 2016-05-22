@@ -1,0 +1,68 @@
+.profile-thumbnail {
+	position: absolute;
+}
+
+.profile-header {
+	min-height: 40px;
+	margin-left: 50px;
+}
+
+ul.tasks {
+    list-style-type: none;
+    padding: 0px;
+    margin: 16px 0px 0px 0px;
+    border-top: 1px solid #e0e0e0;
+}
+ul.tasks li.task {
+    padding: 8px;
+    border-bottom: 1px solid #e0e0e0;
+}
+ul.tasks li.task:hover {
+    background-color: #f0f0f0;
+}
+div.task-date {
+    float: right;
+	clear: right;
+}
+div.task-manager {
+    font-weight: bold;
+}
+
+div.task-worker {
+    font-weight: bold;
+}
+
+div.task-thumbnail {
+    position: absolute;
+}
+div.task-content {
+    margin-left: 48px;
+    min-height: 48px;
+}
+
+div.task-footer {
+    text-align: right;
+}
+
+div.task-complited {
+	color: #3A7734;
+}
+
+div.task-inprogress {
+	color: firebrick;
+}
+
+div.pagination {
+    width: 90%;
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+}
+
+.graph {
+    width: 700px;
+    padding: 5px;
+    padding-right: 20px;
+    border: solid 1px black;
+    float: left;
+   }
