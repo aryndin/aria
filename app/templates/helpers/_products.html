@@ -1,0 +1,49 @@
+<table class="table table-condensed table-bordered">
+	<thead>
+		<tr>
+			<th></th>
+			<th>Name</th>
+			<th>Amount</th>
+			<th>Measure</th>
+			<th>Assembled</th>
+			<th>Marketable</th>
+			<th>Image</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for product in products %}
+			<tr>
+				<td>
+					<a href="{{ url_for('.product', id=product.id)}}">
+						<span class="glyphicon glyphicon-file"></span>
+					</a>
+				</td>
+				<td>{{ product.name }}</td>
+				<td>{{ product.stock }}</td>
+				<td><{{ product.measure.name }}></td>
+				<td>
+					{% if product.type.assembled %}
+						<span class="glyphicon glyphicon-ok"></span>
+					{% else %}
+						<span class="glyphicon glyphicon-remove"></span>
+					{% endif %}
+				</td>
+				<td>
+					{% if product.type.marketable %}
+						<span class="glyphicon glyphicon-ok"></span>
+					{% else %}
+						<span class="glyphicon glyphicon-remove"></span>
+					{% endif %}
+				</td>
+				<td>
+					{% if product.img_file %}
+						<img src="{{ url_for('static', filename='images/'+product.img_file) }}", width="100", heigth="100">
+					{% else %}
+						<img src="{{ url_for('static', filename='images/none.png') }}", width="100", heigth="100">
+					{% endif %}
+
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>

@@ -1,0 +1,23 @@
+{% import "helpers/_macros.html" as macros %}
+
+
+{% extends "base.html" %}
+{% block page_header %}
+	<h1>{{_('Products')}}</h1>
+	{% if current_user.is_allowed(Permission.DEPOT_M) %}
+		<a class="btn btn-default"
+           href="{{ url_for('.new_thing') }}">
+            {{_('Add items')}}
+        </a>
+	{% endif %}
+{% endblock page_header %}
+{% block page_body %}
+	{% if products %}
+		{% include 'helpers/_products.html' %}
+		{% if pagination %}
+			<div class="pagination">
+				{{ macros.pagination_widget(pagination, '.products') }}
+			</div>
+		{% endif %}
+	{% endif %}
+{% endblock page_body %}

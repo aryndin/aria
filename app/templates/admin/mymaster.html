@@ -26,3 +26,12 @@
 			{% endif %}
 		</ul>
 {% endblock %}
+{% block tail_js %}
+	{{ super() }}
+	<script src="{{ url_for('static', filename='ru.js') }}" type="text/javascript">
+		var locale = window.navigator.userLanguage || window.navigator.language;
+		moment.locale(locale);
+		console.log(moment.locale());
+		console.log(moment(1316116057189).fromNow());
+	</script>
+{% endblock tail_js %}

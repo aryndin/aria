@@ -1,3 +1,4 @@
+{% import "admin/lib.html" as lib %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% extends 'admin/master.html' %}
 
@@ -7,8 +8,15 @@
 		<a class="btn btn-default" href="{{ url_for('analytics.index', form='acf') }}">Assemled items</a>
 	</div>
 	{% if form %}
+
 		{{ wtf.quick_form(form) }}
 	{% endif %}
 	<p>Hi</p>
 
 {% endblock %}
+
+{% block tail_js %}
+	{{super()}}
+	{{ lib.form_css() }}
+	{{ lib.form_js() }}
+{% endblock tail_js %}

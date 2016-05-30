@@ -6,7 +6,7 @@
 	<img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=40) }}">
 	<div class="profile-header">
 		<h1>
-			{{_('User')}}: {{ user.nickname }}
+			{{_('User')}}: {{ user.nickname }} - {{ user.fullname }}
 		</h1>
 
 		{% if current_user==user %}

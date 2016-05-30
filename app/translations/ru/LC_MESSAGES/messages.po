@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-23 00:37+0300\n"
+"POT-Creation-Date: 2016-05-26 12:18+0300\n"
 "PO-Revision-Date: 2016-05-23 00:14+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -19,11 +19,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.2.0\n"
 
+#: app/admin/__init__.py:10 app/templates/user.html:9
+msgid "User"
+msgstr "Пользователь"
+
 #: app/admin/__init__.py:10 app/admin/__init__.py:11 app/admin/__init__.py:12
 #: app/admin/__init__.py:13 app/admin/__init__.py:14 app/admin/__init__.py:15
 #: app/admin/__init__.py:16
 msgid "Database"
 msgstr "База данных"
+
+#: app/admin/__init__.py:11 app/templates/task.html:4
+msgid "Task"
+msgstr "Задача"
+
+#: app/admin/__init__.py:12
+msgid "Thing"
+msgstr "Склад"
+
+#: app/admin/__init__.py:13
+msgid "Product"
+msgstr "Продукт"
+
+#: app/admin/__init__.py:14 app/main/forms.py:25
+msgid "Group"
+msgstr "Группа"
+
+#: app/admin/__init__.py:15
+msgid "Supplier"
+msgstr "Поставщик"
+
+#: app/admin/__init__.py:16
+msgid "Shipment"
+msgstr "Поставка"
 
 #: app/admin/__init__.py:18
 msgid "Analytics"
@@ -40,10 +68,6 @@ msgstr "Email"
 #: app/main/forms.py:24
 msgid "Fullname"
 msgstr "ФИО"
-
-#: app/main/forms.py:25
-msgid "Group"
-msgstr "Группа"
 
 #: app/main/forms.py:26 app/main/forms.py:51
 msgid "Submit"
@@ -66,6 +90,7 @@ msgid "Description"
 msgstr "Описание"
 
 #: app/main/forms.py:48
+#, fuzzy
 msgid "Worker"
 msgstr "Исполнитель"
 
@@ -134,10 +159,6 @@ msgstr "Создать задачу"
 msgid "Add new item"
 msgstr "Новый артикул"
 
-#: app/templates/task.html:4
-msgid "Task"
-msgstr "Задача"
-
 #: app/templates/task.html:13
 msgid "manager"
 msgstr "Назначил"
@@ -155,10 +176,6 @@ msgstr "Редактирвать"
 msgid "Delete"
 msgstr "Удалить"
 
-#: app/templates/user.html:9
-msgid "User"
-msgstr "Пользователь"
-
 #: app/templates/user.html:16 app/templates/user.html:19
 #: app/templates/user.html:24
 msgid "Edit Profile"
@@ -175,4 +192,46 @@ msgstr "Вам назначены следующие задачи"
 #: app/templates/auth/login.html:21
 msgid "Sign In"
 msgstr "Авторизация"
+
+#~ msgid "Database"
+#~ msgstr "База данных"
+
+#~ msgid "Analytics"
+#~ msgstr "Аналитика"
+
+#~ msgid "Nickname (login)"
+#~ msgstr "Логин"
+
+#~ msgid "Email"
+#~ msgstr "Email"
+
+#~ msgid "Fullname"
+#~ msgstr "ФИО"
+
+#~ msgid "Group"
+#~ msgstr "Группа"
+
+#~ msgid "Submit"
+#~ msgstr "ОК"
+
+#~ msgid "Email is already registered."
+#~ msgstr "Email уже используется"
+
+#~ msgid "Nickname is already registered."
+#~ msgstr "Логин уже используется"
+
+#~ msgid "Title"
+#~ msgstr "Заголовок"
+
+#~ msgid "Description"
+#~ msgstr "Описание"
+
+#~ msgid "Worker"
+#~ msgstr "Исполнитель"
+
+#~ msgid "Price"
+#~ msgstr "Цена"
+
+#~ msgid "Timelimit"
+#~ msgstr "Срок выполнения"
 

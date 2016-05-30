@@ -1,3 +1,4 @@
+import locale
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bootstrap import Bootstrap
@@ -6,6 +7,8 @@ from flask.ext.pagedown import PageDown
 from flask_babelex import Babel
 from config import config
 
+
+locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
 
 bootstrap = Bootstrap()
 db = SQLAlchemy()
@@ -27,7 +30,8 @@ def create_app(config_name):
 	lm.init_app(app)
 	pagedown.init_app(app)
 
-	from app.admin import flaskadmin
+	with app.app_context():
+		from app.admin import flaskadmin
 	flaskadmin.init_app(app)
 
 	from .main import main as main_blueprint

@@ -1,7 +1,8 @@
 from flask import render_template, flash, redirect, abort, session, url_for, request, g, current_app
 from flask.ext.login import login_user, logout_user, current_user, login_required
+from sqlalchemy import or_
 from .. import db, lm
-from ..models import User, Permission, Group, Task, Thing
+from ..models import User, Permission, Group, Task, Thing, TypeOfThing
 from . import main
 from ..decorators import permission_required
 from .forms import EditProfileForm, EditProfileAdminForm, TaskForm, ThingsForm
@@ -165,6 +166,27 @@ def depot():
 						   things=things,
 						   pagination=pagination)
 
+@main.route('/products')
+@login_required
+@permission_required(Permission.BASIC)
+def products():
+	page = request.args.get('page', 1, type=int)
+	print(Thing.query.join(TypeOfThing).filter_by(assembled=1).first())
+	pagination = Thing.query.join(TypeOfThing).filter_by(assembled=1).order_by(Thing.name).paginate(
+		page, per_page=current_app.config['FLASKY_ELEMENTS_PER_PAGE'] or None,
+		error_out=False
+	)
+	products = pagination.items
+	return render_template('products.html',
+						   products=products,
+						   pagination=pagination)
+
+
+@main.route('/product/<int:id>')
+@login_required
+def product(id):
+	product = Thing.query.get_or_404(id)
+	return render_template('product.html', product=product)
 
 @main.route('/depot/new-item', methods=['GET', 'POST'])
 @login_required

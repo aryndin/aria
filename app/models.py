@@ -4,6 +4,7 @@ import bleach
 from markdown import markdown
 from flask import request
 from app import db
+from sqlalchemy.ext.associationproxy import association_proxy
 from . import lm
 from werkzeug.security import generate_password_hash, check_password_hash
 from hashlib import md5
@@ -121,7 +122,7 @@ class User(db.Model):
 			return str(self.id)  # python 3
 
 	def __repr__(self):
-		return '<User {}>'.format(self.nickname)
+		return '<User {} Name {}>'.format(self.nickname, self.fullname)
 
 	def gravatar(self, size=100, default='identicon', rating='g'):
 		if request.is_secure:
@@ -147,6 +148,11 @@ class Task(db.Model):
 	timelimit = db.Column(db.DateTime)
 	price = db.Column(db.Numeric(precision=10, scale=3))
 	state = db.Column(db.Boolean)
+	type_id = db.Column(db.Integer, db.ForeignKey('task_types.id'))
+
+	things = db.relationship('TaskToAssemble', back_populates='task', lazy='dynamic',
+							 cascade="save-update, merge, delete, delete-orphan")
+
 
 	def delete(self):
 		db.session.delete(self)
@@ -188,6 +194,25 @@ class Task(db.Model):
 db.event.listen(Task.description, 'set', Task.on_changed_description)
 
 
+class TaskType(db.Model):
+	__tablename__ = 'task_types'
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(64))
+
+	tasks = db.relationship('Task', backref='type', lazy='dynamic')
+
+	def __repr__(self):
+		return '<{}>'.format(self.name)
+
+class TaskToAssemble(db.Model):
+	__tablename__ = 'task_to_assemble'
+	task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'), primary_key=True)
+	thing_id = db.Column(db.Integer, db.ForeignKey('things.id'), primary_key=True)
+	amount = db.Column(db.Integer)
+	task = db.relationship('Task', back_populates='things', lazy='joined')
+	thing = db.relationship('Thing', back_populates='tasks', lazy='joined')
+
+
 class Group(db.Model):
 	__tablename__ = 'groups'
 	id = db.Column(db.Integer, primary_key=True)
@@ -203,10 +228,15 @@ class Group(db.Model):
 	def insert_roles():
 		groups = {
 			'User': Permission.BASIC,
-			'Manager': (Permission.DEPOT_M |
+			'Manager': (Permission.BASIC |
+						Permission.DEPOT_M |
 						Permission.SALE_M |
 						Permission.USER_M),
-			'Administrator': 0xff
+			'Administrator': 0xff,
+			'Depot manager': (Permission.DEPOT_M |
+							  Permission.BASIC),
+			'Sales manager': (Permission.SALE_M |
+							  Permission.BASIC)
 		}
 
 		for g in groups:
@@ -293,6 +323,7 @@ class Thing(db.Model):
 	measure_id = db.Column(db.Integer, db.ForeignKey('measures.id'))
 	stock = db.Column(db.Numeric(precision=10, scale=3))
 	price = db.Column(db.Numeric(precision=10, scale=3))
+	img_file = db.Column(db.String(64))
 	type_id = db.Column(db.Integer, db.ForeignKey('types_of_things.id'))
 	consist_of = db.relationship('ConsistOf', foreign_keys='[ConsistOf.thing_id]',
 								 backref=db.backref('thing', lazy='joined'),
@@ -303,7 +334,10 @@ class Thing(db.Model):
 								 backref=db.backref('part', lazy='joined'),
 								 lazy='dynamic',
 								 cascade='all, delete-orphan')
-	products = db.relationship('Product', backref='product')
+	products = db.relationship('Product', backref='thing')
+
+	tasks = db.relationship('TaskToAssemble', back_populates='thing', lazy='dynamic',
+							 cascade="save-update, merge, delete, delete-orphan")
 
 	def __repr__(self):
 		return '<{}>'.format(self.name)
@@ -315,14 +349,21 @@ class TypeOfThing(db.Model):
 	name = db.Column(db.String(64))
 	assembled = db.Column(db.Boolean, default=False)
 	marketable = db.Column(db.Boolean, default=False)
-	things = db.relationship('Thing', backref='type')
+	things = db.relationship('Thing', backref='type', lazy='dynamic')
+
+	def __repr__(self):
+		return '<{}>'.format(self.name)
 
 
 class Measure(db.Model):
 	__tablename__ = 'measures'
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(64))
+	countable = db.Column(db.Boolean())
 	things_measures = db.relationship('Thing', backref='measure')
+
+	def __repr__(self):
+		return '<{}>'.format(self.name)
 
 
 class ConsistOf(db.Model):
@@ -335,7 +376,7 @@ class ConsistOf(db.Model):
 class Product(db.Model):
 	__tablename__ = 'products'
 	id = db.Column(db.Integer, primary_key=True)
-	product_id = db.Column(db.Integer, db.ForeignKey('things.id'))
+	product_id = db.Column(db.Integer, db.ForeignKey('things.id')) # TODO : not null.
 	assembly_date = db.Column(db.DateTime)
 	assembler = db.relationship('User',
 								secondary='product_assembler',
@@ -343,7 +384,20 @@ class Product(db.Model):
 								lazy='dynamic')
 
 	def __repr__(self):
-		return '<{}>'.format(self.product.name)
+		# attrs = db.class_mapper(self.__class__).column_attrs
+		attrs = db.class_mapper(self.__class__).attrs  # show also relationships
+		if 'name' in attrs:
+			return self.name
+		elif 'code' in attrs:
+			return self.code
+		else:
+			print(attrs)
+			type(attrs)
+			return "<%s(%s)>" % (self.__class__.__name__,
+								 ', '.join('%s=%r' % (k.key, getattr(self, k.key))
+										   for k in attrs
+										   )
+								 )
 
 
 class Buyer(db.Model):
@@ -359,8 +413,10 @@ class Order(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	id_buyer = db.Column(db.Integer, db.ForeignKey(Buyer.id))
 	state = db.Column(db.Boolean)
-	things = db.relationship('OrderList', back_populates='order', lazy='dynamic',
+	order_things = db.relationship('OrderList', back_populates='order', lazy='dynamic',
 							 cascade="save-update, merge, delete, delete-orphan")
+
+	things = association_proxy('order_list', 'order')
 
 
 class OrderList(db.Model):
@@ -369,7 +425,7 @@ class OrderList(db.Model):
 	thing_id = db.Column(db.Integer, db.ForeignKey('things.id'), primary_key=True)
 	amount = db.Column(db.Numeric(precision=10, scale=3))
 	price = db.Column(db.Numeric(precision=10, scale=3))
-	order = db.relationship('Order', back_populates='things', lazy='joined')
+	order = db.relationship('Order', back_populates='order_things', lazy='joined')
 	thing = db.relationship('Thing', back_populates='orders', lazy='joined')
 
 

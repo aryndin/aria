@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block page_header %}
+		<h1>
+			{{_('Product')}} - {{ product.name }}
+		</h1>
+{% endblock page_header %}
+{% block page_body %}
+<div class="product">
+	<div class="product-content">
+		<div class="product-image">
+			{% if product.img_file %}
+				<img src="{{ url_for('static', filename='images/'+product.img_file) }}", width="200", heigth="200">
+			{% else %}
+				<img src="{{ url_for('static', filename='images/none.png') }}", width="200", heigth="200">
+			{% endif %}
+		</div>
+		<div class="product-desctriprion">
+			{% if not product.consist_of.all() %}
+				<h2>{{_('Has no parts')}}</h2>
+			{% else %}
+				<h2>{{_('Consist of:')}}</h2>
+				<ul>
+					{% for part in product.consist_of %}
+						<li>
+							{{part.part.name}} - {{part.amount}}
+						</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+			<!-- TODO: link documents -->
+			{{_('Documents:')}}
+			<ul>
+				<li>
+					<a>Инструкция по сборке</a>
+				</li>
+				<li>
+					<a>Схема платы</a>
+				</li>
+				<li>
+					<a>Принципиальная электрическая схема</a>
+				</li>
+			</ul>
+		</div>
+
+
+	</div>
+
+</div>
+{% endblock page_body %}

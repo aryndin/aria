@@ -11,8 +11,11 @@
 				<div class="task-date"> {{ task.timestamp }} </div>
 				<div class="task-manager">
 					<a href="{{ url_for('.user', nickname=task.manager.nickname) }}">
-						{{ task.manager.nickname }}
+						{{ task.manager.nickname }} - {{ task.manager.fullname }}
 					</a>
+				</div>
+				<div class="task-type">
+					{{_('Task type:')}}{{ task.type.name }}
 				</div>
 				<div class="task-title {% if task.state %} task-complited
 										{% else %} task-inprogress
@@ -26,6 +29,16 @@
 						{{ task.description }}
 					{% endif %}
 				</div>
+				{% if task.type.name=='Сборка' %}
+					{{_('Products to assemble:')}}
+						<ul>
+						{% for thing in task.things %}
+							<li>
+								{{thing.thing.name}} - {{thing.amount}}
+							</li>
+						{% endfor %}
+						</ul>
+				{% endif %}
 				<div class="task-footer">
 					<a href="{{ url_for('.task', id=task.id) }}">
 						<span class="label label-default">#</span>
