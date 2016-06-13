@@ -5,7 +5,12 @@
 
 {% block body %}
 	<div class="page-header">
-		<a class="btn btn-default" href="{{ url_for('analytics.index', form='acf') }}">Assemled items</a>
+		<h1>{{_('Analytics module')}}</h1>
+		<h2>{{_('Choose report:')}}</h2>
+		<a class="btn btn-default" href="{{ url_for('analytics.index', form='acf') }}">{{_('Assemled items')}}</a>
+		<a class="btn btn-default" href="{{ url_for('analytics.index', form='acf') }}">{{_('Completed tasks')}}</a>
+		<a class="btn btn-default" href="{{ url_for('analytics.index', form='acf') }}">{{_('Sales')}}</a>
+		<a class="btn btn-default" href="{{ url_for('analytics.index', form='acf') }}">{{_('Shipments')}}</a>
 	</div>
 	{% if form %}
 

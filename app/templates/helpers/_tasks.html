@@ -39,6 +39,16 @@
 						{% endfor %}
 						</ul>
 				{% endif %}
+				{% if task.type.name=='Комплектация' %}
+					{{_('Collect a package with:')}}
+						<ul>
+						{% for thing in task.things %}
+							<li>
+								{{thing.thing.name}} - {{thing.amount}}
+							</li>
+						{% endfor %}
+						</ul>
+				{% endif %}
 				<div class="task-footer">
 					<a href="{{ url_for('.task', id=task.id) }}">
 						<span class="label label-default">#</span>

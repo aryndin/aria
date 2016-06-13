@@ -5,7 +5,7 @@ from .. import db, lm
 from ..models import User, Permission, Group, Task, Thing, TypeOfThing
 from . import main
 from ..decorators import permission_required
-from .forms import EditProfileForm, EditProfileAdminForm, TaskForm, ThingsForm
+from .forms import EditProfileForm, EditProfileAdminForm, TaskForm, ThingsForm, SelectProductsForm
 from app import babel
 from flask.ext.babelex import gettext, lazy_gettext
 
@@ -203,6 +203,7 @@ def new_thing():
 		return render_template('new_thing.html', form=form)
 	return render_template('index.html')
 
+	# TODO: Call to mind what is this?
 	# if form.validate_on_submit():
 	# 	task = Task(title=form.title.data,
 	# 				description=form.description.data,
@@ -215,6 +216,51 @@ def new_thing():
 	# 	db.session.commit()
 	# 	flash('The task has been added', category='success')
 	# 	return redirect(url_for('.user', nickname=worker_nickname))
+
+
+@main.route('/depot/analytics', methods=['GET', 'POST'])
+@login_required
+@permission_required(Permission.DEPOT_M)
+def depot_analytics():
+	form = SelectProductsForm(request.form)
+
+	if form.validate_on_submit():
+		numbers = [int(n) for n in form.number.data.split(' ')]
+		if len(numbers) != len(form.products.data):
+			flash('Количество аппаратов и характеризующих их числел не совпадает', category='error')
+		else:
+			np = {}
+			products = Thing.query.filter(Thing.id.in_(form.products.data)).all()
+			for product, number in zip(products, numbers):
+				for part in product.consist_of:
+					if part.part.id in np:
+						np[part.part.id] += part.amount*number
+					else:
+						np[part.part.id] = part.amount*number
+			stock_p = Thing.query.filter(Thing.id.in_(np.keys())).all()
+			success = True
+			plenty = True
+			for p in stock_p:
+				if (p.stock-np[p.id]) < 0:
+					success = False
+					plenty = False
+				elif (p.stock-np[p.id]) < p.stock/10:
+					plenty = False
+				if not success and not plenty:
+					break
+			for part in stock_p:
+				print (part.name, part.stock)
+			return render_template("analytics_result.html", np=np, stock_p=stock_p, success=success, plenty=plenty)
+
+
+	return render_template("analytics.html", form=form)
+
+
+@main.route('/buyers')
+@login_required
+@permission_required(Permission.DEPOT_M)
+def buyers():
+	return render_template('buyers.html')
 
 
 @babel.localeselector

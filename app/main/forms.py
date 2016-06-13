@@ -1,12 +1,38 @@
 from flask.ext.babelex import lazy_gettext
 from flask.ext.wtf import Form
 from wtforms import StringField, BooleanField, PasswordField, SubmitField, SelectField, DecimalField, FieldList, \
-	FormField
+	FormField, SelectMultipleField
 from wtforms.ext.dateutil.fields import DateTimeField
 from flask.ext.pagedown.fields import PageDownField
 from wtforms.validators import Length, DataRequired, Regexp, ValidationError, Email
 from wtforms.widgets import TableWidget
-from ..models import Group, User
+from ..models import Group, User, TypeOfThing, Thing
+
+
+class Select2MultipleField(SelectMultipleField):
+
+
+
+	def pre_validate(self, form):
+		# Prevent "not a valid choice" error
+		pass
+
+
+class SelectProductsForm(Form):
+	products = SelectMultipleField(u'Tags',
+				 coerce=int)
+
+	number = StringField(lazy_gettext('Number of'), validators=[
+		DataRequired(), Regexp('^[0-9 ]+$', 0,
+							   'only numbers please')
+	])
+	submit = SubmitField()
+
+	def __init__(self, *args, **kwargs):
+		super(SelectProductsForm, self).__init__(*args, **kwargs)
+		print (self.products.choices)
+		self.products.choices = [(thing.id, thing.name)
+								for thing in Thing.query.join(TypeOfThing).filter_by(assembled=1).all()]
 
 
 class EditProfileForm(Form):

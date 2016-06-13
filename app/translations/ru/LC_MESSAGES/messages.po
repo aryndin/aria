@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-26 12:18+0300\n"
+"POT-Creation-Date: 2016-05-30 13:40+0300\n"
 "PO-Revision-Date: 2016-05-23 00:14+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -19,43 +19,91 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.2.0\n"
 
-#: app/admin/__init__.py:10 app/templates/user.html:9
+#: app/admin/__init__.py:11 app/templates/user.html:9
 msgid "User"
 msgstr "Пользователь"
 
-#: app/admin/__init__.py:10 app/admin/__init__.py:11 app/admin/__init__.py:12
-#: app/admin/__init__.py:13 app/admin/__init__.py:14 app/admin/__init__.py:15
-#: app/admin/__init__.py:16
+#: app/admin/__init__.py:11 app/admin/__init__.py:12 app/admin/__init__.py:13
+#: app/admin/__init__.py:14 app/admin/__init__.py:15 app/admin/__init__.py:16
+#: app/admin/__init__.py:17 app/admin/__init__.py:18 app/admin/__init__.py:19
+#: app/admin/__init__.py:20 app/admin/__init__.py:21 app/admin/__init__.py:22
+#: app/admin/__init__.py:23 app/admin/__init__.py:24 app/admin/__init__.py:25
+#: app/admin/__init__.py:26 app/admin/__init__.py:31
 msgid "Database"
 msgstr "База данных"
 
-#: app/admin/__init__.py:11 app/templates/task.html:4
+#: app/admin/__init__.py:12 app/templates/task.html:4
 msgid "Task"
 msgstr "Задача"
 
-#: app/admin/__init__.py:12
+#: app/admin/__init__.py:13
+msgid "Type of task"
+msgstr "Тип задачи"
+
+#: app/admin/__init__.py:14
+msgid "Task to assemble"
+msgstr "Список к сборке"
+
+#: app/admin/__init__.py:15
 msgid "Thing"
 msgstr "Склад"
 
-#: app/admin/__init__.py:13
+#: app/admin/__init__.py:16 app/templates/product.html:4
 msgid "Product"
 msgstr "Продукт"
 
-#: app/admin/__init__.py:14 app/main/forms.py:25
+#: app/admin/__init__.py:17 app/main/forms.py:25
 msgid "Group"
 msgstr "Группа"
 
-#: app/admin/__init__.py:15
+#: app/admin/__init__.py:18
 msgid "Supplier"
 msgstr "Поставщик"
 
-#: app/admin/__init__.py:16
+#: app/admin/__init__.py:19
 msgid "Shipment"
 msgstr "Поставка"
 
-#: app/admin/__init__.py:18
+#: app/admin/__init__.py:20
+msgid "Buier"
+msgstr "Покупатель"
+
+#: app/admin/__init__.py:21
+msgid "Order"
+msgstr "Заказ"
+
+#: app/admin/__init__.py:22
+msgid "Invoice"
+msgstr "Накладная"
+
+#: app/admin/__init__.py:23 app/templates/helpers/_buyers.html:6
+msgid "Order list"
+msgstr "Состав заказа"
+
+#: app/admin/__init__.py:24
+msgid "Type of thing"
+msgstr "Тип вещи"
+
+#: app/admin/__init__.py:25 app/templates/helpers/_products.html:7
+#: app/templates/helpers/_things.html:7
+msgid "Measure"
+msgstr "Мера"
+
+#: app/admin/__init__.py:26
+msgid "Consist of"
+msgstr "Состоит из"
+
+#: app/admin/__init__.py:28
 msgid "Analytics"
 msgstr "Аналитика"
+
+#: app/admin/views.py:48 app/main/forms.py:37
+msgid "Email is already registered."
+msgstr "Email уже используется"
+
+#: app/admin/views.py:235
+msgid "Invalid Choice: could not coerce {}"
+msgstr "Неверный выбор: невозможно принудительно конвертировать {}"
 
 #: app/main/forms.py:17
 msgid "Nickname (login)"
@@ -73,10 +121,6 @@ msgstr "ФИО"
 msgid "Submit"
 msgstr "ОК"
 
-#: app/main/forms.py:37
-msgid "Email is already registered."
-msgstr "Email уже используется"
-
 #: app/main/forms.py:42
 msgid "Nickname is already registered."
 msgstr "Логин уже используется"
@@ -90,11 +134,10 @@ msgid "Description"
 msgstr "Описание"
 
 #: app/main/forms.py:48
-#, fuzzy
 msgid "Worker"
 msgstr "Исполнитель"
 
-#: app/main/forms.py:49
+#: app/main/forms.py:49 app/templates/helpers/_things.html:5
 msgid "Price"
 msgstr "Цена"
 
@@ -126,11 +169,15 @@ msgstr "Выйти"
 msgid "Log In"
 msgstr "Войти"
 
+#: app/templates/buyers.html:6
+msgid "Buyers"
+msgstr "Покупатели"
+
 #: app/templates/depot.html:6 app/templates/user.html:36
 msgid "Depot"
 msgstr "Склад"
 
-#: app/templates/depot.html:10
+#: app/templates/depot.html:10 app/templates/products.html:10
 msgid "Add items"
 msgstr "Добавить"
 
@@ -159,6 +206,22 @@ msgstr "Создать задачу"
 msgid "Add new item"
 msgstr "Новый артикул"
 
+#: app/templates/product.html:19
+msgid "Has no parts"
+msgstr "Не имеет частей"
+
+#: app/templates/product.html:21
+msgid "Consist of:"
+msgstr "Состоит из:"
+
+#: app/templates/product.html:31
+msgid "Documents:"
+msgstr "Документы"
+
+#: app/templates/products.html:6
+msgid "Products"
+msgstr "Продукция"
+
 #: app/templates/task.html:13
 msgid "manager"
 msgstr "Назначил"
@@ -168,13 +231,17 @@ msgid "worker"
 msgstr "Исполнитель"
 
 #: app/templates/task.html:39 app/templates/task.html:44
-#: app/templates/helpers/_tasks.html:35 app/templates/helpers/_tasks.html:39
+#: app/templates/helpers/_tasks.html:48 app/templates/helpers/_tasks.html:52
 msgid "Edit"
 msgstr "Редактирвать"
 
 #: app/templates/task.html:41 app/templates/task.html:46
 msgid "Delete"
 msgstr "Удалить"
+
+#: app/templates/task.html:49
+msgid "Done!"
+msgstr "Завершить!"
 
 #: app/templates/user.html:16 app/templates/user.html:19
 #: app/templates/user.html:24
@@ -192,6 +259,58 @@ msgstr "Вам назначены следующие задачи"
 #: app/templates/auth/login.html:21
 msgid "Sign In"
 msgstr "Авторизация"
+
+#: app/templates/helpers/_buyers.html:4
+msgid "Buyer's name"
+msgstr "Имя покупателя"
+
+#: app/templates/helpers/_buyers.html:5
+msgid "Phone number"
+msgstr "Номер телефона"
+
+#: app/templates/helpers/_buyers.html:7
+msgid "Order date"
+msgstr "Дата заказа"
+
+#: app/templates/helpers/_buyers.html:8
+msgid "Paid"
+msgstr "Оплата"
+
+#: app/templates/helpers/_products.html:5
+msgid "Name"
+msgstr "Название"
+
+#: app/templates/helpers/_products.html:6
+msgid "Amount"
+msgstr "Количество"
+
+#: app/templates/helpers/_products.html:8 app/templates/helpers/_things.html:8
+msgid "Assembled"
+msgstr "Собран"
+
+#: app/templates/helpers/_products.html:9 app/templates/helpers/_things.html:9
+msgid "Marketable"
+msgstr "Продаётся"
+
+#: app/templates/helpers/_products.html:10
+msgid "Image"
+msgstr "Изображение"
+
+#: app/templates/helpers/_tasks.html:18
+msgid "Task type:"
+msgstr "Тип задания:"
+
+#: app/templates/helpers/_tasks.html:33
+msgid "Products to assemble:"
+msgstr "Продукты к сборке:"
+
+#: app/templates/helpers/_things.html:4
+msgid "Item"
+msgstr "Заголовок"
+
+#: app/templates/helpers/_things.html:6
+msgid "Stock"
+msgstr "Остаток"
 
 #~ msgid "Database"
 #~ msgstr "База данных"

@@ -1,0 +1,85 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet">
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+	<script type="text/javascript">
+		function set_openid(openid, pr)
+		{
+			u = openid.search('<username>')
+			if (u != -1) {
+				// openid requires username
+				user = prompt('Enter your ' + pr + ' username:')
+				openid = openid.substr(0, u) + user
+			}
+			document.forms['login'].elements['login'].value = openid
+		}
+	</script>
+<script type="text/javascript">
+		$(document).ready(function() {
+			// https://select2.github.io/examples.html
+			$(".tags-select").select2({});
+		});
+</script>
+
+
+{% endblock scripts %}
+
+{% block page_header %}
+	<h1>{{ _('Depot analytics') }}</h1>
+{% endblock page_header %}
+
+{% block page_body %}
+<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+
+			<form class="" action="{{ url_for('.depot_analytics') }}" method="post">
+				{{ form.hidden_tag() }}
+				Аппараты:
+				<div class="form-group {% if form.products.errors %}has-error{% endif %}">
+					<select class="tags-select form-control" name="{{ form.products.name }}" multiple="multiple" data-tags=1>
+						{% for tag_field in form.products %}
+						{{ tag_field }}
+						{% endfor %}
+					</select>
+					{% if form.products.errors -%}
+					<ul class="help-block small text-danger">
+						{% for error in form.products.errors %}
+						<li>
+							{{ error }}
+						</li>
+						{% endfor %}
+					</ul>
+					{%- endif %}
+					</div>
+				<div class="form-group {% if form.number.errors %}has-error{% endif %}">
+					Количество:
+					{{ form.number(class_="form-control") }}
+					{% if form.number.errors -%}
+					<ul class="help-block small text-danger">
+						{% for error in form.number.errors %}
+						<li>
+							{{ error }}
+						</li>
+						{% endfor %}
+					</ul>
+					{%- endif %}
+				</div>
+				<div>
+					{{ form.submit(class_="btn btn-primary") }}
+				</div>
+			</form>
+		</div>
+	</div>
+
+{% endblock page_body %}

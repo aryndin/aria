@@ -1,0 +1,17 @@
+{% import "helpers/_macros.html" as macros %}
+
+
+{% extends "base.html" %}
+{% block page_header %}
+	<h1>{{_('Result')}}</h1>
+{% endblock page_header %}
+{% block page_body %}
+	{% if stock_p %}
+		{% include 'helpers/_ar.html' %}
+		{% if pagination %}
+			<div class="pagination">
+				{{ macros.pagination_widget(pagination, '.products') }}
+			</div>
+		{% endif %}
+	{% endif %}
+{% endblock page_body %}

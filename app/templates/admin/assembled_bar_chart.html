@@ -11,15 +11,7 @@
 	<script>
 		var data = JSON.parse('{{ data|safe }}');
 	</script>
-	<script type="text/javascript">
-		var myBarChart = new Chart(ctx, {
-    type: 'bar',
-    data: data,
-			options: {
-				responsive: false
-			}
-});
-	</script>
+	<script type="text/javascript" src="{{ url_for('static', filename='barchart.js') }}"></script>
 
 {% endblock tail_js %}
 {% block body %}
@@ -30,12 +22,16 @@
 	</script>
 	<p>
 	<h3>Всего собрано аппаратов:</h3>
-		2014 год - 410<br>
-		2015 год - 300<br>
+		{% for part in total %}
+			{{ part[0] }} год - {{ part[1] }}<br>
+		{% endfor %}
 	</p>
 	<h3>В среднем за месяц:</h3>
 	<p>
-		2014 год - 59<br>
-		2015 год - 43<br>
+		{% for part in total %}
+			{{ part[0] }} год - {% if part[1]/12<1 %} менее одного
+								{% else %} {{ part[1]/12 }}
+								{% endif %}<br>
+		{% endfor %}
 	</p>
 {% endblock %}

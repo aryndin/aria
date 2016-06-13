@@ -1,6 +1,29 @@
 {% extends 'admin/master.html' %}
+
+{% block tail_js %}
+{{ super() }}
+	<script type="text/javascript" src="{{ url_for('static', filename='Chart.min.js') }}"></script>
+	<script>
+		var ctx = document.getElementById("myChart");
+		ctx.canvas.width = 300;
+		ctx.canvas.height = 300;
+	</script>
+	<script>
+		var data = JSON.parse('{{ data|safe }}');
+	</script>
+	<script type="text/javascript" src="{{ url_for('static', filename='barchart.js') }}"></script>
+
+{% endblock tail_js %}
+
 {% block body %}
-  <p>Here I'm going to display some data.
-  {{ admin_base_template }}</p>
+  <h1>Продажи</h1>
+	<h2>Количество проданных за последнюю неделю аппаратов - {{ total|int }}</h2>
+	<canvas style="width: 500px; height: 500px;" id="myChart" width="500" height="500"></canvas>
+	<h3> Наиболее продаваемая модель - САИ А250 ПРО</h3>
+	<h1>Остатки комплектующих</h1>
+		<ul>
+			<li>САИ А250 ПРО - не более 4 шт. </li>
+			<li>САИ А350 ПРОМ - не более 6 шт. </li>
+		</ul>
 {% endblock %}
 

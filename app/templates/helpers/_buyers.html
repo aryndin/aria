@@ -1,16 +1,54 @@
 <table class="table table-condensed table-bordered">
 	<thead>
 		<tr>
-			<th></th>
-			<th>{{_('Name')}}</th>
-			<th>{{_('Amount')}}</th>
-			<th>{{_('Measure')}}</th>
-			<th>{{_('Assembled')}}</th>
-			<th>{{_('Marketable')}}</th>
-			<th>{{_('Image')}}</th>
+			<th>{{_("Buyer's name")}}</th>
+			<th>{{_('Phone number')}}</th>
+			<th>{{_('Order list')}}</th>
+			<th>{{_('Order date')}}</th>
+			<th>{{_('Paid')}}</th>
 		</tr>
 	</thead>
 	<tbody>
+		<tr>
+			<td>
+				Иванов Иван Иванович
+			</td>
+			<td>
+				8-555-654-78-79
+			</td>
+			<td>
+				<ul>
+					<li>САИ А250 ПРО - 3 &ltшт.&gt</li>
+				</ul>
+			</td>
+			<td>
+				04.05.2016
+			</td>
+			<td>
+				<span class="glyphicon glyphicon-ok"></span>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				ООО "Вектор"
+			</td>
+			<td>
+				8-555-55-55-55
+			</td>
+			<td>
+				<ul>
+					<li>САИ А250 ПРО - 10 &ltшт.&gt</li>
+					<li>САИ А350 ПРОМ - 20 &ltшт.&gt</li>
+				</ul>
+			</td>
+			<td>
+				06.06.2016
+			</td>
+			<td>
+				<span class="glyphicon glyphicon-remove"></span>
+			</td>
+		</tr>
+
 		{% for product in products %}
 			<tr>
 				<td>

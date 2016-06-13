@@ -1,0 +1,105 @@
+{% macro set_row_color(part, np) %}
+	{% if (part.stock-np[part.id])>part.stock/10 %}
+		class="success"
+	{% elif (part.stock-np[part.id])>=0 %}
+		class="warning"
+	{% else %}
+		class="danger"
+	{% endif %}
+
+{% endmacro %}
+
+<table class="table table-condensed table-bordered">
+	<thead>
+		<tr>
+			<th>{{_('Part name')}}</th>
+			<th>{{_('Necessary amount')}}</th>
+			<th>{{_('Measure')}}</th>
+			<th>{{_('Amount in stock')}}</th>
+			<th>{{_('Residual amount')}}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for part in stock_p %}
+			<tr {{ set_row_color(part, np) }}>
+				<td>
+					{{ part.name }}
+				</td>
+				<td>
+					{{ np[part.id] }}
+				</td>
+				<td>
+					{{ part.measure.name }}
+				</td>
+				<td>
+					{{ part.stock }}
+				</td>
+				<td>
+					{{ part.stock-np[part.id] }}
+				</td>
+
+
+
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% if not success %}
+<h2>Not enough parts:</h2>
+<table class="table table-condensed table-bordered">
+	<thead>
+		<tr>
+			<th>{{_('Part name')}}</th>
+			<th>{{_('Not enough amount')}}</th>
+			<th>{{_('Measure')}}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for p in stock_p %}
+			{% if (p.stock-np[p.id]) < 0 %}
+				<tr>
+					<td>
+						{{ p.name }}
+					</td>
+					<td>
+						{{ -(p.stock-np[p.id]) }}
+					</td>
+					<td>
+						{{ p.measure.name }}
+					</td>
+				</tr>
+			{% endif %}
+		{% endfor %}
+	</tbody>
+</table>
+{% endif %}
+{% if not plenty %}
+<h2>These parts are about to run out:</h2>
+<table class="table table-condensed table-bordered">
+	<thead>
+		<tr>
+			<th>{{_('Part name')}}</th>
+			<th>{{_('Residual amount')}}</th>
+			<th>{{_('Measure')}}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for p in stock_p %}
+			{% if (p.stock-np[p.id]) < p.stock/10 and (p.stock-np[p.id]) >= 0 %}
+				<tr>
+					<td>
+						{{ p.name }}
+					</td>
+					<td>
+						{{ (p.stock-np[p.id]) }}
+					</td>
+					<td>
+						{{ p.measure.name }}
+					</td>
+				</tr>
+			{% endif %}
+		{% endfor %}
+	</tbody>
+</table>
+{% endif %}
+

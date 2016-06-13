@@ -407,11 +407,17 @@ class Buyer(db.Model):
 	phone_number = db.Column(db.String(30))
 	orders = db.relationship('Order', backref='buyer', lazy='dynamic')
 
+	def __repr__(self):
+		return '<{}>'.format(self.fullname)
+
+
 
 class Order(db.Model):
 	__tablename__ = 'order'
 	id = db.Column(db.Integer, primary_key=True)
 	id_buyer = db.Column(db.Integer, db.ForeignKey(Buyer.id))
+	date_of_placing = db.Column(db.DateTime, default=datetime.now)
+	date_of_payment = db.Column(db.DateTime)
 	state = db.Column(db.Boolean)
 	order_things = db.relationship('OrderList', back_populates='order', lazy='dynamic',
 							 cascade="save-update, merge, delete, delete-orphan")
@@ -421,7 +427,7 @@ class Order(db.Model):
 
 class OrderList(db.Model):
 	__tablename__ = 'order_list'
-	buyer_id = db.Column(db.Integer, db.ForeignKey('order.id'), primary_key=True)
+	buyer_id = db.Column(db.Integer, db.ForeignKey('order.id'), primary_key=True) # TODO: error - buyer_id instead of order_id
 	thing_id = db.Column(db.Integer, db.ForeignKey('things.id'), primary_key=True)
 	amount = db.Column(db.Numeric(precision=10, scale=3))
 	price = db.Column(db.Numeric(precision=10, scale=3))
