@@ -243,7 +243,6 @@ def depot_analytics():
 			for p in stock_p:
 				if (p.stock-np[p.id]) < 0:
 					success = False
-					plenty = False
 				elif (p.stock-np[p.id]) < p.stock/10:
 					plenty = False
 				if not success and not plenty:
